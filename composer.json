@@ -1,0 +1,16 @@
+{
+  "name": "iborodikhin/kazkom-epay",
+  "description": "PHP library for Kazakom ePay",
+  "authors": [
+    {
+      "name": "Igor Borodikhin",
+      "email": "iborodikhin@gmail.com"
+    }
+  ],
+  "require-dev": {
+    "squizlabs/php_codesniffer": "1.*"
+  },
+  "autoload": {
+    "psr-0": { "Epay\\": "src/" }
+  }
+}

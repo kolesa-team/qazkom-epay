@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="Kazkom-Epay">
+    <description>Описание стандарта кодирования для PHP_CodeSniffer'а</description>
+
+    <!-- Наследуемся целиком от PSR-1 -->
+    <rule ref="PSR2"/>
+
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule>
+
+    <rule ref="Generic.Files.LineEndings">
+        <properties>
+            <property name="eolChar" value="\n"/>
+        </properties>
+    </rule>
+</ruleset>
