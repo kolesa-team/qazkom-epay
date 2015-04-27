@@ -45,6 +45,19 @@ class Client
     }
 
     /**
+     * Возвращает ID валюты.
+     *
+     * @param  string       $key
+     * @return null|integer
+     */
+    public function getCurrencyId($key = 'KZT')
+    {
+        $types = array_flip($this->currencyEnum);
+
+        return isset($types[$key]) ? $types[$key] : null;
+    }
+
+    /**
      * Возвращает содержимое XML-файла с подстановкой переменных из массива.
      *
      * @param $filename
