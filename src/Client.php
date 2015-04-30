@@ -72,7 +72,7 @@ class Client
         }
 
         $content = file_get_contents($filename);
-        $values  = array_values($transommonformations);
+        $values  = array_values($transformations);
         $keys    = array_map(function ($item) {
             return '[' . $item . ']';
         }, array_keys($transformations));
