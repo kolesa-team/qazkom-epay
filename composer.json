@@ -11,6 +11,6 @@
     "squizlabs/php_codesniffer": "1.*"
   },
   "autoload": {
-    "psr-0": { "Epay\\": "src/" }
+    "psr-4": { "Epay\\": "src/" }
   }
 }
