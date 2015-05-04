@@ -173,7 +173,7 @@ class Sign
      */
     public function loadPublicKey()
     {
-        if (null === $this->publicKey) {
+        if (!is_resource($this->publicKey)) {
             if (!is_readable($this->publicKeyPath)) {
                 throw new Exceptions\FileNotFound();
             }
@@ -182,13 +182,11 @@ class Sign
 
             $this->validateErrorString(openssl_error_string());
 
-            if (is_resource($publicKey)) {
-                $this->publicKey = $publicKey;
-
-                return $this->publicKey;
+            if (!is_resource($publicKey)) {
+                return false;
             }
 
-            return false;
+            $this->publicKey = $publicKey;
         }
 
         return $this->publicKey;
@@ -206,7 +204,7 @@ class Sign
      */
     public function loadPrivateKey()
     {
-        if (null === $this->privateKey) {
+        if (!is_resource($this->privateKey)) {
             if (!is_readable($this->privateKeyPath)) {
                 throw new Exceptions\FileNotFound();
             }
@@ -218,13 +216,11 @@ class Sign
 
             $this->validateErrorString(openssl_error_string());
 
-            if (is_resource($privateKey)) {
-                $this->privateKey = $privateKey;
-
-                return $this->privateKey;
+            if (!is_resource($privateKey)) {
+                return false;
             }
 
-            return false;
+            $this->privateKey = $privateKey;
         }
 
         return $this->privateKey;
