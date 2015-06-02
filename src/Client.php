@@ -37,11 +37,15 @@ class Client
      */
     public function __construct($configPath)
     {
-        if (!is_readable($configPath)) {
-            throw new Common\ConfigNotFound();
+        if (is_string($configPath) && is_readable($configPath)) {
+            $this->config = parse_ini_file($configPath);
+        } elseif (is_array($configPath)) {
+            $this->config = $configPath;
+        } elseif (is_object($configPath) && is_callable(array($configPath, 'toArray'))) {
+            $this->config = $configPath->toArray();
         }
 
-        $this->config = parse_ini_file($configPath);
+        throw new Common\ConfigNotFound();
     }
 
     /**
