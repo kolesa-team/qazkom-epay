@@ -173,21 +173,19 @@ class Sign
      */
     public function loadPublicKey()
     {
-        if (!is_resource($this->publicKey)) {
-            if (!is_readable($this->publicKeyPath)) {
-                throw new Exceptions\FileNotFound();
-            }
-
-            $publicKey = openssl_pkey_get_public(file_get_contents($this->publicKeyPath));
-
-            $this->validateErrorString(openssl_error_string());
-
-            if (!is_resource($publicKey)) {
-                return false;
-            }
-
-            $this->publicKey = $publicKey;
+        if (!is_readable($this->publicKeyPath)) {
+            throw new Exceptions\FileNotFound();
         }
+
+        $publicKey = openssl_pkey_get_public(file_get_contents($this->publicKeyPath));
+
+        $this->validateErrorString(openssl_error_string());
+
+        if (!is_resource($publicKey)) {
+            return false;
+        }
+
+        $this->publicKey = $publicKey;
 
         return $this->publicKey;
     }
@@ -204,24 +202,22 @@ class Sign
      */
     public function loadPrivateKey()
     {
-        if (!is_resource($this->privateKey)) {
-            if (!is_readable($this->privateKeyPath)) {
-                throw new Exceptions\FileNotFound();
-            }
-
-            $privateKey = openssl_pkey_get_private(
-                file_get_contents($this->privateKeyPath),
-                $this->privateKeyPassword
-            );
-
-            $this->validateErrorString(openssl_error_string());
-
-            if (!is_resource($privateKey)) {
-                return false;
-            }
-
-            $this->privateKey = $privateKey;
+        if (!is_readable($this->privateKeyPath)) {
+            throw new Exceptions\FileNotFound();
         }
+
+        $privateKey = openssl_pkey_get_private(
+            file_get_contents($this->privateKeyPath),
+            $this->privateKeyPassword
+        );
+
+        $this->validateErrorString(openssl_error_string());
+
+        if (!is_resource($privateKey)) {
+            return false;
+        }
+
+        $this->privateKey = $privateKey;
 
         return $this->privateKey;
     }
