@@ -43,9 +43,9 @@ class Client
             $this->config = $configPath;
         } elseif (is_object($configPath) && is_callable(array($configPath, 'toArray'))) {
             $this->config = $configPath->toArray();
+        } else {
+            throw new Common\ConfigNotFound();
         }
-
-        throw new Common\ConfigNotFound();
     }
 
     /**
