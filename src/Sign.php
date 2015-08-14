@@ -41,7 +41,7 @@ class Sign
      *
      * @var boolean
      */
-    protected $privateKeyIsEncrypted = false;
+    protected $privateKeyIsEncrypted = true;
 
     /**
      * Приватный ключ.
