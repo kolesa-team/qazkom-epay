@@ -37,6 +37,13 @@ class Sign
     protected $invertResult = false;
 
     /**
+     * Требуется ли расшифровка приватного ключа.
+     *
+     * @var boolean
+     */
+    protected $privateKeyIsEncrypted = false;
+
+    /**
      * Приватный ключ.
      *
      * @var string
@@ -57,9 +64,10 @@ class Sign
      */
     public function __construct(array $config)
     {
-        $this->publicKeyPath      = isset($config['PUBLIC_KEY_FN']) ? $config['PUBLIC_KEY_FN'] : null;
-        $this->privateKeyPath     = isset($config['PRIVATE_KEY_FN']) ? $config['PRIVATE_KEY_FN'] : null;
-        $this->privateKeyPassword = isset($config['PRIVATE_KEY_PASS']) ? $config['PRIVATE_KEY_PASS'] : null;
+        $this->publicKeyPath         = isset($config['PUBLIC_KEY_FN']) ? $config['PUBLIC_KEY_FN'] : null;
+        $this->privateKeyPath        = isset($config['PRIVATE_KEY_FN']) ? $config['PRIVATE_KEY_FN'] : null;
+        $this->privateKeyPassword    = isset($config['PRIVATE_KEY_PASS']) ? $config['PRIVATE_KEY_PASS'] : null;
+        $this->privateKeyIsEncrypted = isset($config['PRIVATE_KEY_ENCRYPTED']) && $config['PRIVATE_KEY_ENCRYPTED'] == 1;
     }
 
     /**
@@ -206,10 +214,11 @@ class Sign
             throw new Exceptions\FileNotFound();
         }
 
-        $privateKey = openssl_pkey_get_private(
-            file_get_contents($this->privateKeyPath),
-            $this->privateKeyPassword
-        );
+        if (!$this->privateKeyIsEncrypted) {
+            return file_get_contents($this->privateKey);
+        }
+
+        $privateKey = openssl_pkey_get_private(file_get_contents($this->privateKeyPath), $this->privateKeyPassword);
 
         $this->validateErrorString(openssl_error_string());
 
