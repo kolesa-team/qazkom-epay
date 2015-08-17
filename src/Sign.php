@@ -215,7 +215,7 @@ class Sign
         }
 
         if (!$this->privateKeyIsEncrypted) {
-            return file_get_contents($this->privateKey);
+            return file_get_contents($this->privateKeyPath);
         }
 
         $privateKey = openssl_pkey_get_private(file_get_contents($this->privateKeyPath), $this->privateKeyPassword);
