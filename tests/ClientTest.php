@@ -118,6 +118,119 @@ class ClientTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \Epay\Client::processRequest()
+     * @dataProvider provideTestProcessRequestNegative
+     * @param array  $config
+     * @param mixed  $orderId
+     * @param mixed  $currencyCode
+     * @param mixed  $amount
+     * @param string $expectedClassName
+     */
+    public function testProcessRequestNegative($config, $orderId, $currencyCode, $amount, $expectedClassName)
+    {
+        $client = new Client($config);
+
+        try {
+            $xml = $client->processRequest($orderId, $currencyCode, $amount);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf($expectedClassName, $e);
+        }
+    }
+
+    /**
+     * @covers \Epay\Client::processRequest()
+     * @throws \Epay\Exceptions\Amount\EmptyAmount
+     * @throws \Epay\Exceptions\Certificate\UnknownError
+     * @throws \Epay\Exceptions\Currency\EmptyId
+     * @throws \Epay\Exceptions\Currency\InvalidId
+     * @throws \Epay\Exceptions\Order\EmptyId
+     * @throws \Epay\Exceptions\Order\NotNumeric
+     * @throws \Epay\Exceptions\Order\NullId
+     */
+    public function testProcessRequestPositive()
+    {
+        $client = new Client(array(
+            'MERCHANT_CERTIFICATE_ID' => '00c182b189',
+            'MERCHANT_NAME'           => 'Demo Shop',
+            'PRIVATE_KEY_FN'          => ROOT_DIR . '/tests/data/cert.prv',
+            'PRIVATE_KEY_PASS'        => 'nissan',
+            'PRIVATE_KEY_ENCRYPTED'   => 1,
+            'XML_TEMPLATE_FN'         => ROOT_DIR . '/tests/data/template.xml',
+            'XML_TEMPLATE_CONFIRM_FN' => ROOT_DIR . '/tests/data/template_confirm.xml',
+            'PUBLIC_KEY_FN'           => ROOT_DIR . '/tests/data/kkbca_test.pub',
+            'MERCHANT_ID'             => '92061101',
+        ));
+
+        $xml = $client->processRequest(1, $client->getCurrencyId('KZT'), 1000);
+
+        $this->assertInternalType('string', $xml);
+
+        $xml = $client->processRequest(1, $client->getCurrencyId('KZT'), 1000, true);
+
+        $this->assertInternalType('string', $xml);
+    }
+
+    /**
+     * @covers \Epay\Client::processConfirmation()
+     * @dataProvider provideTestProcessConfirmationNegative
+     * @param array  $config
+     * @param mixed  $reference
+     * @param mixed  $approvalCode
+     * @param mixed  $orderId
+     * @param mixed  $currencyCode
+     * @param mixed  $amount
+     * @param string $expectedClassName
+     */
+    public function testProcessConfirmationNegative(
+        $config,
+        $reference,
+        $approvalCode,
+        $orderId,
+        $currencyCode,
+        $amount,
+        $expectedClassName
+    ) {
+        $client = new Client($config);
+
+        try {
+            $xml = $client->processConfirmation($reference, $approvalCode, $orderId, $currencyCode, $amount);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf($expectedClassName, $e);
+        }
+    }
+
+    /**
+     * @covers \Epay\Client::processConfirmation()
+     * @throws \Epay\Exceptions\Amount\EmptyAmount
+     * @throws \Epay\Exceptions\Certificate\UnknownError
+     * @throws \Epay\Exceptions\Order\EmptyId
+     * @throws \Epay\Exceptions\Order\NotNumeric
+     * @throws \Epay\Exceptions\Order\NullId
+     */
+    public function testProcessConfirmationPositive()
+    {
+        $client = new Client(array(
+            'MERCHANT_CERTIFICATE_ID' => '00c182b189',
+            'MERCHANT_NAME'           => 'Demo Shop',
+            'PRIVATE_KEY_FN'          => ROOT_DIR . '/tests/data/cert.prv',
+            'PRIVATE_KEY_PASS'        => 'nissan',
+            'PRIVATE_KEY_ENCRYPTED'   => 1,
+            'XML_TEMPLATE_FN'         => ROOT_DIR . '/tests/data/template.xml',
+            'XML_TEMPLATE_CONFIRM_FN' => ROOT_DIR . '/tests/data/template_confirm.xml',
+            'PUBLIC_KEY_FN'           => ROOT_DIR . '/tests/data/kkbca_test.pub',
+            'MERCHANT_ID'             => '92061101',
+        ));
+
+        $xml = $client->processConfirmation('reference', 'code', 1, $client->getCurrencyId('KZT'), 1000);
+
+        $this->assertInternalType('string', $xml);
+
+        $xml = $client->processConfirmation('reference', 'code', 1, $client->getCurrencyId('KZT'), 1000, true);
+
+        $this->assertInternalType('string', $xml);
+    }
+
+    /**
      * Дата-провайдер для позитивного теста конструктора.
      * 
      * @return array
@@ -146,5 +259,161 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ['USD', 840],
             ['EUR', null],
         ];
+    }
+
+    /**
+     * Дата-провайдер для негативного теста создания запроса.
+     *
+     * @return array
+     */
+    public function provideTestProcessRequestNegative()
+    {
+        $config = array(
+            'MERCHANT_CERTIFICATE_ID' => '00c182b189',
+            'MERCHANT_NAME'           => 'Demo Shop',
+            'PRIVATE_KEY_FN'          => ROOT_DIR . '/tests/data/cert.prv',
+            'PRIVATE_KEY_PASS'        => 'nissan',
+            'PRIVATE_KEY_ENCRYPTED'   => 1,
+            'XML_TEMPLATE_FN'         => ROOT_DIR . '/tests/data/template.xml',
+            'XML_TEMPLATE_CONFIRM_FN' => ROOT_DIR . '/tests/data/template_confirm.xml',
+            'PUBLIC_KEY_FN'           => ROOT_DIR . '/tests/data/kkbca_test.pub',
+            'MERCHANT_ID'             => '92061101',
+        );
+
+        return array(
+            array(
+                $config,
+                '',
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Order\\EmptyId',
+            ),
+            array(
+                $config,
+                'not-number',
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Order\\NotNumeric',
+            ),
+            array(
+                $config,
+                0,
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Order\\NullId',
+            ),
+            array(
+                $config,
+                1,
+                '',
+                1000,
+                '\\Epay\\Exceptions\\Currency\\EmptyId',
+            ),
+            array(
+                $config,
+                1,
+                'unknown-currency',
+                1000,
+                '\\Epay\\Exceptions\\Currency\\InvalidId',
+            ),
+            array(
+                $config,
+                1,
+                398,
+                0,
+                '\\Epay\\Exceptions\\Amount\\EmptyAmount',
+            ),
+            array(
+                array_merge($config, array('XML_TEMPLATE_FN' => '')),
+                1,
+                398,
+                100,
+                '\\Epay\\Exceptions\\Certificate\\UnknownError',
+            ),
+            array(
+                array_merge($config, array('PRIVATE_KEY_FN' => '')),
+                1,
+                398,
+                100,
+                '\\Epay\\Exceptions\\Certificate\\UnknownError',
+            ),
+        );
+    }
+
+    /**
+     * Дата-провайдер для негативного теста создания подтверждения.
+     *
+     * @return array
+     */
+    public function provideTestProcessConfirmationNegative()
+    {
+        $config = array(
+            'MERCHANT_CERTIFICATE_ID' => '00c182b189',
+            'MERCHANT_NAME'           => 'Demo Shop',
+            'PRIVATE_KEY_FN'          => ROOT_DIR . '/tests/data/cert.prv',
+            'PRIVATE_KEY_PASS'        => 'nissan',
+            'PRIVATE_KEY_ENCRYPTED'   => 1,
+            'XML_TEMPLATE_FN'         => ROOT_DIR . '/tests/data/template.xml',
+            'XML_TEMPLATE_CONFIRM_FN' => ROOT_DIR . '/tests/data/template_confirm.xml',
+            'PUBLIC_KEY_FN'           => ROOT_DIR . '/tests/data/kkbca_test.pub',
+            'MERCHANT_ID'             => '92061101',
+        );
+
+        return array(
+            array(
+                $config,
+                'reference',
+                'code',
+                '',
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Order\\EmptyId',
+            ),
+            array(
+                $config,
+                'reference',
+                'code',
+                'orderId',
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Order\\NotNumeric',
+            ),
+            array(
+                $config,
+                'reference',
+                'code',
+                0,
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Order\\NullId',
+            ),
+            array(
+                $config,
+                'reference',
+                'code',
+                1,
+                398,
+                0,
+                '\\Epay\\Exceptions\\Amount\\EmptyAmount',
+            ),
+            array(
+                array_merge($config, array('PRIVATE_KEY_FN' => '')),
+                'reference',
+                'code',
+                1,
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Certificate\\UnknownError',
+            ),
+            array(
+                array_merge($config, array('XML_TEMPLATE_CONFIRM_FN' => '')),
+                'reference',
+                'code',
+                1,
+                398,
+                1000,
+                '\\Epay\\Exceptions\\Certificate\\UnknownError',
+            ),
+        );
     }
 }

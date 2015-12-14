@@ -232,7 +232,7 @@ class Client
                 throw new Certificate\UnknownError('Path for Private key not found');
                 break;
 
-            case strlen($this->config['XML_TEMPLATE_FN']) == 0:
+            case strlen($this->config['XML_TEMPLATE_CONFIRM_FN']) == 0:
                 throw new Certificate\UnknownError('Path for Private key not found');
                 break;
         }
