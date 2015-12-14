@@ -8,9 +8,10 @@
     }
   ],
   "require-dev": {
-    "squizlabs/php_codesniffer": "1.*"
+    "squizlabs/php_codesniffer": "1.*",
+    "phpunit/phpunit": "^5.1"
   },
   "autoload": {
-    "psr-4": { "Epay\\": "src/" }
+    "psr-4": { "Epay\\": "src/", "Tests\\": "tests/" }
   }
 }

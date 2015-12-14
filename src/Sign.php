@@ -92,7 +92,7 @@ class Sign
      */
     public function sign($data)
     {
-        $privateKey = $this->loadPrivateKey($this->privateKeyPath, $this->privateKeyPassword);
+        $privateKey = $this->loadPrivateKey();
 
         if (false !== $privateKey) {
             $result = '';
@@ -162,8 +162,9 @@ class Sign
         }
 
         $publicKey = $this->loadPublicKey();
-        $result    = openssl_verify($data, $string, $publicKey);
+        $this->validateErrorString(openssl_error_string());
 
+        $result = openssl_verify($data, $string, $publicKey);
         $this->validateErrorString(openssl_error_string());
 
         return $result;
@@ -246,19 +247,15 @@ class Sign
             switch (true) {
                 case strpos($error, 'error:0906D06C') !== false:
                     throw new Exceptions\CertificateReadError();
-                    break;
 
                 case strpos($error, 'error:06065064') !== false:
                     throw new Exceptions\CertificateDecryptError();
-                    break;
 
                 case strpos($error, 'error:0906A068') !== false:
                     throw new Exceptions\CertificatePasswordError();
-                    break;
 
                 default:
                     throw new Exceptions\UnknownError($error);
-                    break;
             }
         }
     }

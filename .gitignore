@@ -1,1 +1,4 @@
 \.*
+composer.lock
+tests/output/
+vendor/
