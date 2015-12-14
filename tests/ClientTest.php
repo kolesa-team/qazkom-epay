@@ -50,7 +50,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrencyId($key, $expected)
     {
-        $client = new Client([]);
+        $client = new Client(array());
 
         $this->assertEquals($expected, $client->getCurrencyId($key));
     }
@@ -60,7 +60,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function testSplitSign()
     {
-        $client = new Client([]);
+        $client = new Client(array());
 
         $result = $client->splitSign('
         <document>
@@ -103,7 +103,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             "CURRENCY"                => "currency",
             "MERCHANT_ID"             => "merchantId",
         );
-        $client   = new Client([]);
+        $client   = new Client(array());
         $result   = $client->processXml($filename, $trans);
 
         $this->assertInternalType('string', $result);
