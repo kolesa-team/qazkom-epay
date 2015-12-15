@@ -230,6 +230,47 @@ class ClientTest extends \PHPUnit_Framework_TestCase
         $this->assertInternalType('string', $xml);
     }
 
+    public function testProcessResponse()
+    {
+        $client = new Client(array(
+            'MERCHANT_CERTIFICATE_ID' => '00c182b189',
+            'MERCHANT_NAME'           => 'Demo Shop',
+            'PRIVATE_KEY_FN'          => ROOT_DIR . '/tests/data/cert.prv',
+            'PRIVATE_KEY_PASS'        => 'nissan',
+            'PRIVATE_KEY_ENCRYPTED'   => 1,
+            'XML_TEMPLATE_FN'         => ROOT_DIR . '/tests/data/template.xml',
+            'XML_TEMPLATE_CONFIRM_FN' => ROOT_DIR . '/tests/data/template_confirm.xml',
+            'PUBLIC_KEY_FN'           => ROOT_DIR . '/tests/data/kkbca_test.pub',
+            'MERCHANT_ID'             => '92061101',
+        ));
+        $response = '
+<document>
+    <bank name="Kazkommertsbank JSC">
+        <merchant id="90002102">
+            <command type="reverse"/>
+            <payment reference="" approval_code="" orderid="" amount="" currency_code=""/>
+            <reason>Only for reverse</reason>
+        </merchant>
+        <merchant_sign type="RSA" cert_id="">
+        AGKJHSGHGIYTEG&DT*STT&IGHGFLKJHSGLKJHMNBFLKRSJHSKJFHKJHfldsflkjskksldjfl
+        </merchant_sign>
+        <response code="00" message="Approved"/>
+    </bank>
+    <bank_sign type="RSA" cert_id="">
+        p25i1rUH7StnhOfnkHSOHguuPMePaGXtiPGEOrJE4bof1gFVH19mhDyHjfWa6OeJ80fidyvVf1X4
+        ewyP0yG4GxJSl0VyXz7+PNLsbs1lJe42d1fixvozhJSSYN6fAxMN8hhDht6S81YK3GbDTE7GH498
+        pU9HGuGAoDVjB+NtrHk=
+    </bank_sign>
+</document>
+';
+
+        $result = $client->processResponse($response);
+
+        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('CHECKRESULT', $result);
+        $this->assertEquals('[SIGN_GOOD]', $result['CHECKRESULT']);
+    }
+
     /**
      * Дата-провайдер для позитивного теста конструктора.
      * 
