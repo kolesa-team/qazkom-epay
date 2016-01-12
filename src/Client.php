@@ -286,7 +286,7 @@ class Client
             $sign->setInvert(true);
 
             $data  = $this->splitSign($response, 'BANK');
-            $check = $sign->checkSign64($response, $data['RAWSIGN']);
+            $check = $sign->checkSign64($data['LETTER'], $data['RAWSIGN']);
 
             switch ($check) {
                 case 1:
