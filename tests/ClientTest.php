@@ -278,7 +278,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
      */
     public function provideTestConstructPositive()
     {
-        $mock = $this->getMock(\stdClass::class, ['toArray']);
+        $mock = $this->getMock("stdClass", ['toArray']);
         $mock->method('toArray')->willReturn(['key' => 'value']);
 
         return [
