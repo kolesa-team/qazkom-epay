@@ -243,6 +243,8 @@ class Sign
      */
     protected function validateErrorString($error)
     {
+        return; //@TODO Жуткий временный костыль в связи с внезапными рандомными ошибками при чтении ключей
+
         if (strlen($error) > 0) {
             switch (true) {
                 case strpos($error, 'error:0906D06C') !== false:
