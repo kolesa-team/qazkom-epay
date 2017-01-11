@@ -1,10 +1,6 @@
 # kazkom-epay
 PHP library for Qazkom ePay integration
 
-## Library is deprecated
-
-This library is deprecated and no longer supported. Use `kolesa-team/qazkom-epay` instead.
-
 ## Installation
 ```
 $ composer require iborodikhin/kazkom-epay
