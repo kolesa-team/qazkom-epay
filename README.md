@@ -1,9 +1,9 @@
-# kazkom-epay
+# Qazkom-epay
 PHP library for Qazkom ePay integration
 
 ## Installation
 ```
-$ composer require iborodikhin/kazkom-epay
+$ composer require kolesa-team/qazkom-epay
 ```
 
 ## Basic usage
