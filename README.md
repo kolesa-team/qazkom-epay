@@ -1,5 +1,9 @@
 # kazkom-epay
-PHP library for Kazkom ePay integration
+PHP library for Qazkom ePay integration
+
+## Library is deprecated
+
+This library is deprecated and no longer supported. Use `kolesa-team/qazkom-epay` instead.
 
 ## Installation
 ```
@@ -23,7 +27,7 @@ $client = new \Epay\Client(array(
 $signature = $client->processRequest($orderId, $client->getCurrencyId('KZT'), $amount);
 
 // Process payment system response
-$result = $client->processResmonse($response);
+$result = $client->processResponse($response);
 
 // Confirm request to unblock amount
 $result = $client->processConfirmation($reference, $approvalCode, $orderId, $client->getCurrencyId('KZT'), $amount);
