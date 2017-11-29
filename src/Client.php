@@ -32,7 +32,7 @@ class Client
     /**
      * Конструктор.
      *
-     * @param  string                $configPath
+     * @param  string|array|object $configPath
      * @throws Common\ConfigNotFound
      */
     public function __construct($configPath)
@@ -51,7 +51,7 @@ class Client
     /**
      * Возвращает ID валюты.
      *
-     * @param  string       $key
+     * @param  string $key
      * @return null|integer
      */
     public function getCurrencyId($key = 'KZT')
@@ -65,7 +65,7 @@ class Client
      * Возвращает содержимое XML-файла с подстановкой переменных из массива.
      *
      * @param $filename
-     * @param  array               $transformations
+     * @param  array $transformations
      * @return mixed
      * @throws Common\FileNotFound
      */
@@ -110,10 +110,10 @@ class Client
     /**
      * Создаёт подписанный XML-запрос.
      *
-     * @param  integer                  $orderId
-     * @param  integer                  $currencyCode
-     * @param  integer                  $amount
-     * @param  boolean                  $base64encode
+     * @param integer $orderId
+     * @param integer $currencyCode
+     * @param integer $amount
+     * @param boolean $base64encode
      * @return string
      * @throws Amount\EmptyAmount
      * @throws Certificate\UnknownError
@@ -190,12 +190,12 @@ class Client
     /**
      * Создаёт подписанное XML-подтверждение.
      *
-     * @param  string                   $reference
-     * @param  string                   $approvalCode
-     * @param  integer                  $orderId
-     * @param  integer                  $currencyCode
-     * @param  integer                  $amount
-     * @param  boolean                  $base64encode
+     * @param  string $reference
+     * @param  string $approvalCode
+     * @param  integer $orderId
+     * @param  integer $currencyCode
+     * @param  integer $amount
+     * @param  boolean $base64encode
      * @return string
      * @throws Amount\EmptyAmount
      * @throws Certificate\UnknownError
