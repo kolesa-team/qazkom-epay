@@ -124,7 +124,7 @@ class Client
      * @throws Order\NotNumeric
      * @throws Order\NullId
      */
-    public function processRequest($orderId, $currencyCode, $amount, $base64encode = true)
+    public function processRequest($orderId, $currencyCode, $amount, $phone = null, $base64encode = true)
     {
         switch (true) {
             case strlen($orderId) < 1:
@@ -168,6 +168,8 @@ class Client
             'MERCHANT_ID'             => $this->config['MERCHANT_ID'],
             'AMOUNT'                  => $amount,
         );
+        
+        !empty($phone) ? $request['PHONE'] = $phone : null;
 
         $request = $this->processXml($this->config['XML_TEMPLATE_FN'], $request);
         $sign    = new Sign($this->config);
