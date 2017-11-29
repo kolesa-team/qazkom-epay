@@ -1,6 +1,7 @@
 {
   "name": "kolesa-team/qazkom-epay",
   "description": "PHP library for Qazkom ePay",
+  "version": "1.0.0",
   "authors": [
     {
       "name": "Igor Borodikhin",

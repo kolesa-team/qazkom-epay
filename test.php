@@ -30,6 +30,7 @@ $parser = new xml();
 $result = $parser->parse($data);
 
 var_dump($result);
+
 if (in_array("DOCUMENT", $result)) {
     var_export(split_sign($data, "BANK"));
 }
