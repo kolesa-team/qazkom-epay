@@ -223,13 +223,12 @@ class Sign
 
         $this->validateErrorString(openssl_error_string());
 
-        if (!is_resource($privateKey)) {
-            return false;
+        if (is_resource($privateKey) || is_object($privateKey)) {
+            $this->privateKey = $privateKey;
+            return $this->privateKey;
         }
 
-        $this->privateKey = $privateKey;
-
-        return $this->privateKey;
+        return false;
     }
 
     /**
