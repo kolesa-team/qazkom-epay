@@ -190,13 +190,12 @@ class Sign
 
         $this->validateErrorString(openssl_error_string());
 
-        if (!is_resource($publicKey)) {
-            return false;
+        if (is_resource($publicKey) || is_object($publicKey)) {
+            $this->publicKey = $publicKey;
+            return $this->publicKey;
         }
 
-        $this->publicKey = $publicKey;
-
-        return $this->publicKey;
+        return false;
     }
 
     /**
